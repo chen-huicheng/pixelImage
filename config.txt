@@ -1,0 +1,3 @@
+numberOfImage : 100
+ImageSize : 100
+inputImageSize : 100
