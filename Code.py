@@ -142,15 +142,18 @@ def main():
         data.append(int(temp.strip()))
     f.close()
 #    print(data)
-    print('one step runing....')
-    run1(data[0],data[1])
-    print('two step runing....')
-    imageToColor(data[0])
-    path = 'input.jpg'
-    print('three step runing....')
-    setSize(path,path,data[2],data[2])
-    dealImage(path,data[1])
-    print('successfully')
+    if(data[3] == 1):
+        print('one step runing....')
+        run1(data[0],data[1])
+    if(data[4] == 1):
+        print('two step runing....')
+        imageToColor(data[0])
+    if(data[5] == 1):
+        path = 'input.jpg'
+        print('three step runing....')
+        setSize(path,path,data[2],data[2])
+        dealImage(path,data[1])
+        print('successfully')
     
 if __name__ == '__main__':
     main()

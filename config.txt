@@ -1,3 +1,6 @@
-numberOfImage : 100
+numberOfImage : 1400
 ImageSize : 100
 inputImageSize : 100
+oneStep : 0
+twoStep : 1
+threeStep: 1
