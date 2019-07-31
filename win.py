@@ -14,6 +14,7 @@ import numpy as np
 import tkinter
 import random
 import os
+import time
 Image.MAX_IMAGE_PIXELS = 2000000000
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -111,12 +112,13 @@ def dealImage(Imagelist,colorlist,inImage,Imagename,edge):  #处理图片  输�
             outImage.paste(sourceImage,(i*edge,j*edge))
 #            print(i,j)
     i = Imagename.rfind('/')
-    savepath = Imagename[:i+1] + 'output0.jpg'
+    savepath = Imagename[:i+1] + '0.jpg'
     outImage.save(savepath)
     im = Image.open(Imagename)
     im = im.resize((x*edge,y*edge),Image.ANTIALIAS)
+    im = im.convert('RGB')
     out = Image.blend(im,outImage,0.5)
-    savepath = Imagename[:i+1] + 'output1.jpg'
+    savepath = Imagename[:i+1] + '1.jpg'
     out.save(savepath)
     
     
@@ -136,25 +138,46 @@ def oneStep(path,x):
 
 def opendir():
     path = filedialog.askdirectory(title='选择文件夹')
+    if(path == ''):
+        return
     label1['text'] = path
 
 def openImage():
-    Imagename = filedialog.askopenfilename(title='选择图片',filetypes=[('图片', '*')])
+    Imagename = filedialog.askopenfilename(title='选择图片',filetypes=[('图片', '*.jpg')])
+    if(Imagename == ''):
+        return
     label2['text'] = Imagename
 
 def run():
+    btn3.configure(state='disabled')
     path = label1['text']
     Imagename = label2['text']
-    label['text'] = '状态栏：正在运行。。。' 
+    if(path == '文件夹: 未选择'):
+        label['text'] = '状态栏：请选择图片文件夹' 
+        btn3.configure(state='active')
+        return
+    if(Imagename == '图片: 未选择'):
+        label['text'] = '状态栏：请选择图片'
+        btn3.configure(state='active')
+        return
+    label['text'] = '状态栏：正在运行第一步（共三步）' 
+    win.update()
     Imagelist = oneStep(path,100)
-    label['text'] = '状态栏：已完成第一步' 
+    if( len(Imagelist)==0):
+        label['text'] = '状态栏：您选择的文件夹没有图片,或者图片格式不是jpg ,png' 
+        btn3.configure(state='active')
+        return
+    label['text'] = '状态栏：正在运行第二步（共三步）' 
+    win.update()
     colorlist = imageToColor(Imagelist)
-    label['text'] = '状态栏：已完成第二步'
+    label['text'] = '状态栏：正在运行第三步（共三步）'
+    win.update()
     inImage = reSize(Imagename)
     dealImage(Imagelist,colorlist,inImage,Imagename,100)
     i = Imagename.rfind('/')
     savepath = Imagename[:i+1]
-    label['text'] = '状态栏：图片已生成 请到' + savepath + '文件夹查看 output0.jpg , output1.jpg'
+    label['text'] = '图片已生成 请到' + savepath + '文件夹查看 0.jpg , 1.jpg'
+    btn3.configure(state='active')
 
 
 win = tkinter.Tk()
@@ -166,7 +189,7 @@ btn2 = tkinter.Button(win, text='选择图片',font = ('楷体',15,'bold'),width
 btn3 = tkinter.Button(win, text='执行',font =("楷体",20,'bold'),width=18,height=2, command=run)
 label1 = tkinter.Label(win,text='文件夹: 未选择',font = ('楷体',13),width=20,height=4)
 label2 = tkinter.Label(win,text='图片: 未选择',font = ('楷体',13),width=20,height=4)
-label = tkinter.Label(win,text='状态栏',font = ('楷体',13),width=40,height=1,anchor="w")
+label = tkinter.Label(win,text='状态栏',font = ('楷体',12),width=70,height=1,anchor="w")
 btn1.grid(row=0,column=0)
 btn2.grid(row=0,column=1)
 label1.grid(row=1,column=0)
