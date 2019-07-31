@@ -14,7 +14,9 @@ import numpy as np
 import tkinter
 import random
 import os
-
+Image.MAX_IMAGE_PIXELS = 2000000000
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 """
 path :资源图片路径   savepath:输出图片保存路径
@@ -143,14 +145,16 @@ def openImage():
 def run():
     path = label1['text']
     Imagename = label2['text']
-    print(1)
+    label['text'] = '状态栏：正在运行。。。' 
     Imagelist = oneStep(path,100)
-    print(2)
+    label['text'] = '状态栏：已完成第一步' 
     colorlist = imageToColor(Imagelist)
-    print(3)
+    label['text'] = '状态栏：已完成第二步'
     inImage = reSize(Imagename)
-    print(4)
     dealImage(Imagelist,colorlist,inImage,Imagename,100)
+    i = Imagename.rfind('/')
+    savepath = Imagename[:i+1]
+    label['text'] = '状态栏：图片已生成 请到' + savepath + '文件夹查看 output0.jpg , output1.jpg'
 
 
 win = tkinter.Tk()
